@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: my-app-gitops                   # Name of your Argo CD application
+  namespace: argocd              # Must match the namespace where Argo CD is installed
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io # Enables cascading delete (removes K8s resources when app is deleted)
+spec:
+  project: default               # Argo CD project to assign this app to
+
+  # Source: Where your Kubernetes manifests live
+  source:
+    repoURL: 'https://github.com/UttamBindal/test_argocd' # Git repo URL
+    targetRevision: HEAD         # Git branch, tag, or commit SHA
+    path: ./              # Directory path inside the repository
+
+  # Destination: Where to deploy the resources
+  destination:
+    server: 'https://kubernetes.default.svc' # Target cluster API URL (local cluster)
+    namespace: default           # Target namespace in the cluster
+
+  # Sync Policy: How Argo CD handles drift and synchronization
+  syncPolicy:
+    automated:
+      prune: true                # Automatically delete resources no longer in Git
+      selfHeal: true             # Automatically sync when cluster state drifts from Git
+    syncOptions:
+      - CreateNamespace=true    

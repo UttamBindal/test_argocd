@@ -12,7 +12,7 @@ spec:
   source:
     repoURL: 'https://github.com/UttamBindal/test_argocd' # Git repo URL
     targetRevision: HEAD         # Git branch, tag, or commit SHA
-    path: ./              # Directory path inside the repository
+    path: manifest              # Directory path inside the repository
 
   # Destination: Where to deploy the resources
   destination:
